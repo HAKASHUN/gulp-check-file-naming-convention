@@ -15,7 +15,7 @@ var gutil = require("gulp-util"),
 describe("gulp-check-file-naming-convention", function () {
 	it("should pass valid camelCase name files", function (done) {
 		var stream = checkFileNamingConvention({
-			case: 'camelCase'
+			caseName: 'camelCase'
 		});
 
 		stream.on('data', function () {});
@@ -36,7 +36,7 @@ describe("gulp-check-file-naming-convention", function () {
 
 	it("should pass valid paramCase name files", function (done) {
 		var stream = checkFileNamingConvention({
-			case: 'paramCase'
+			caseName: 'paramCase'
 		});
 
 		stream.on('data', function () {});
@@ -51,7 +51,7 @@ describe("gulp-check-file-naming-convention", function () {
 	});
 	it("should error invalid paramCase name files", function (done) {
 		var stream = checkFileNamingConvention({
-			case: 'paramCase'
+			caseName: 'paramCase'
 		});
 
 		stream.on('data', function () {});
@@ -76,7 +76,7 @@ describe("gulp-check-file-naming-convention", function () {
 		});
 
 		var stream = checkFileNamingConvention({
-			case: 'paramCase'
+			caseName: 'paramCase'
 		});
 
 		stream.on("error", function(err) {

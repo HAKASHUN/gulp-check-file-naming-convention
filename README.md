@@ -18,7 +18,7 @@ var check-file-naming-convention = require("gulp-check-file-naming-convention");
 
 gulp.src("./src/*.ext")
 	.pipe(check-file-naming-convention({
-		case: 'camelCase'
+		caseName: 'camelCase'
 	}));
 ```
 

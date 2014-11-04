@@ -8,7 +8,7 @@ module.exports = function (options) {
 	"use strict";
 	var out = [];
 	// if necessary check for required options(s), e.g. options hash, etc.
-	if (!options || !changeCase[options.case]) {
+	if (!options || !changeCase[options.caseName]) {
 		throw new gutil.PluginError("gulp-check-file-naming-convention", "No options supplied");
 	}
 
@@ -40,7 +40,7 @@ module.exports = function (options) {
 
 		try {
 			var parsedPath = parsePath(file.path);
-			var expect = changeCase[options.case](parsedPath.basename);
+			var expect = changeCase[options.caseName](parsedPath.basename);
 			if(parsedPath.basename !== expect) {
 				out.push('Invalid file name at ' + colors.red(file.path) + ' :\n > ' + colors.green(expect + parsedPath.extname) + ' is valid.');
 			}
