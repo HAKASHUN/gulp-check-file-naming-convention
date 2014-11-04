@@ -1,5 +1,5 @@
 # gulp-check-file-naming-convention
-[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url]  [![Coverage Status][coveralls-image]][coveralls-url] [![Dependency Status][depstat-image]][depstat-url]
+[![Build Status](https://travis-ci.org/HAKASHUN/gulp-check-file-naming-convention.svg)](https://travis-ci.org/HAKASHUN/gulp-check-file-naming-convention)
 
 > check-file-naming-convention plugin for [gulp](https://github.com/wearefractal/gulp)
 
