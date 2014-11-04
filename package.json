@@ -18,7 +18,9 @@
   },
   "dependencies": {
     "through2": "*",
-    "gulp-util": "~2.2.0"
+    "gulp-util": "~2.2.0",
+    "change-case": "*",
+    "colors": "~1.0.3"
   },
   "devDependencies": {
     "mocha": "*",

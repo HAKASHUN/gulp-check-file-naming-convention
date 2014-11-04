@@ -13,45 +13,61 @@ var gutil = require("gulp-util"),
 	checkFileNamingConvention = require("../");
 
 describe("gulp-check-file-naming-convention", function () {
+	it("should pass valid camelCase name files", function (done) {
+		var stream = checkFileNamingConvention({
+			case: 'camelCase'
+		});
 
-	var expectedFile = new gutil.File({
-		path: "test/expected/hello.txt",
-		cwd: "test/",
-		base: "test/expected",
-		contents: fs.readFileSync("test/expected/hello.txt")
-	});
+		stream.on('data', function () {});
+		stream.on("end", done);
 
-	it("should produce expected file via buffer", function (done) {
-
-		var srcFile = new gutil.File({
-			path: "test/fixtures/hello.txt",
+		stream.write(new gutil.File({
+			path: "test/fixtures/camelCase/testSample.js",
 			cwd: "test/",
 			base: "test/fixtures",
-			contents: fs.readFileSync("test/fixtures/hello.txt")
-		});
-
-		var stream = checkFileNamingConvention("World");
-
-		stream.on("error", function(err) {
-			should.exist(err);
-			done(err);
-		});
-
-		stream.on("data", function (newFile) {
-
-			should.exist(newFile);
-			should.exist(newFile.contents);
-
-			String(newFile.contents).should.equal(String(expectedFile.contents));
-			done();
-		});
-
-		stream.write(srcFile);
+		}));
+		stream.write(new gutil.File({
+			path: "test/fixtures/camelCase/test.js",
+			cwd: "test/",
+			base: "test/fixtures",
+		}));
 		stream.end();
 	});
 
-	it("should error on stream", function (done) {
+	it("should pass valid paramCase name files", function (done) {
+		var stream = checkFileNamingConvention({
+			case: 'paramCase'
+		});
 
+		stream.on('data', function () {});
+		stream.on("end", done);
+
+		stream.write(new gutil.File({
+			path: "test/fixtures/paramCase/test-sample.js",
+			cwd: "test/",
+			base: "test/fixtures",
+		}));
+		stream.end();
+	});
+	it("should error invalid paramCase name files", function (done) {
+		var stream = checkFileNamingConvention({
+			case: 'paramCase'
+		});
+
+		stream.on('data', function () {});
+		stream.on('error', function(err){
+			should.exist(err);
+			done();
+		});
+
+		stream.write(new gutil.File({
+			path: "test/fixtures/paramCase/testSample.js",
+			cwd: "test/",
+			base: "test/fixtures",
+		}));
+		stream.end();
+	});
+	it("should error on stream", function (done) {
 		var srcFile = new gutil.File({
 			path: "test/fixtures/hello.txt",
 			cwd: "test/",
@@ -59,7 +75,9 @@ describe("gulp-check-file-naming-convention", function () {
 			contents: fs.createReadStream("test/fixtures/hello.txt")
 		});
 
-		var stream = checkFileNamingConvention("World");
+		var stream = checkFileNamingConvention({
+			case: 'paramCase'
+		});
 
 		stream.on("error", function(err) {
 			should.exist(err);
@@ -75,38 +93,4 @@ describe("gulp-check-file-naming-convention", function () {
 		stream.write(srcFile);
 		stream.end();
 	});
-
-	/*
-	it("should produce expected file via stream", function (done) {
-
-		var srcFile = new gutil.File({
-			path: "test/fixtures/hello.txt",
-			cwd: "test/",
-			base: "test/fixtures",
-			contents: fs.createReadStream("test/fixtures/hello.txt")
-		});
-
-		var stream = checkFileNamingConvention("World");
-
-		stream.on("error", function(err) {
-			should.exist(err);
-			done();
-		});
-
-		stream.on("data", function (newFile) {
-
-			should.exist(newFile);
-			should.exist(newFile.contents);
-
-			newFile.contents.pipe(es.wait(function(err, data) {
-				should.not.exist(err);
-				data.should.equal(String(expectedFile.contents));
-				done();
-			}));
-		});
-
-		stream.write(srcFile);
-		stream.end();
-	});
-	*/
 });

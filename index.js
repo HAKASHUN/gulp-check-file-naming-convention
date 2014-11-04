@@ -1,25 +1,31 @@
 var through = require("through2"),
-	gutil = require("gulp-util");
+	gutil = require("gulp-util"),
+	Path = require("path"),
+	changeCase = require("change-case"),
+	colors = require("colors");
 
-module.exports = function (param) {
+module.exports = function (options) {
 	"use strict";
+	var out = [];
+	// if necessary check for required options(s), e.g. options hash, etc.
+	if (!options || !changeCase[options.case]) {
+		throw new gutil.PluginError("gulp-check-file-naming-convention", "No options supplied");
+	}
 
-	// if necessary check for required param(s), e.g. options hash, etc.
-	if (!param) {
-		throw new gutil.PluginError("gulp-check-file-naming-convention", "No param supplied");
+	// parse src path
+	function parsePath(path) {
+		var extname = Path.extname(path);
+		return {
+			dirname: Path.dirname(path),
+			basename: Path.basename(path, extname),
+			extname: extname
+		};
 	}
 
 	// see "Writing a plugin"
 	// https://github.com/gulpjs/gulp/blob/master/docs/writing-a-plugin/README.md
 	function checkFileNamingConvention(file, enc, callback) {
 		/*jshint validthis:true*/
-
-		// Do nothing if no contents
-		if (file.isNull()) {
-			this.push(file);
-			return callback();
-		}
-
 		if (file.isStream()) {
 
 			// http://nodejs.org/api/stream.html
@@ -32,18 +38,25 @@ module.exports = function (param) {
 			return callback();
 		}
 
-		// check if file.contents is a `Buffer`
-		if (file.isBuffer()) {
-
-			// manipulate buffer in some way
-			// http://nodejs.org/api/buffer.html
-			file.contents = new Buffer(String(file.contents) + "\n" + param);
-
-			this.push(file);
-
+		try {
+			var parsedPath = parsePath(file.path);
+			var expect = changeCase[options.case](parsedPath.basename);
+			if(parsedPath.basename !== expect) {
+				out.push('Invalid file name at ' + colors.red(file.path) + ' :\n > ' + colors.green(expect + parsedPath.extname) + ' is valid.');
+			}
+		} catch(err) {
+			out.push(err.message.replace('null:', file.relative + ':'));
 		}
+
 		return callback();
 	}
 
-	return through.obj(checkFileNamingConvention);
+	return through.obj(checkFileNamingConvention, function(callback) {
+		if(out.length > 0) {
+			this.emit('error', new gutil.PluginError('gulp-check-file-naming-convention', out.join('\n\n'), {
+				showStack: false
+			}));
+		}
+		callback();
+	});
 };
