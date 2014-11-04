@@ -1,5 +1,3 @@
-(PLUGIN AUTHOR: Please read [Plugin README conventions](https://github.com/wearefractal/gulp/wiki/Plugin-README-Conventions), then delete this line)
-
 # gulp-check-file-naming-convention
 [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url]  [![Coverage Status][coveralls-image]][coveralls-url] [![Dependency Status][depstat-image]][depstat-url]
 
@@ -20,21 +18,34 @@ var check-file-naming-convention = require("gulp-check-file-naming-convention");
 
 gulp.src("./src/*.ext")
 	.pipe(check-file-naming-convention({
-		msg: "Hello Gulp!"
-	}))
-	.pipe(gulp.dest("./dist"));
+		case: 'camelCase'
+	}));
 ```
 
 ## API
 
 ### check-file-naming-convention(options)
 
-#### options.msg
-Type: `String`  
-Default: `Hello World`
+#### options.case
+Type: `String`
 
-The message you wish to attach to file.
+The case you wish to check.
 
+|available case|
+|-----|
+|upperCase|
+|upperCaseFirst|
+|lowerCase|
+|sentenceCase|
+|titleCase|
+|camelCase|
+|pascalCase|
+|snakeCase|
+|paramCase|
+|dotCase|
+|pathCase|
+|constantCase|
+|swapCase|
 
 ## License
 
